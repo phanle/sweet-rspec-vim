@@ -59,6 +59,33 @@ or in your .vimrc
 
 	let $SWEET_VIM_RSPEC_SHOW_PASSING="true"
 
+## Signs
+
+Signs provide a visual feedback where your tests are failing or pending. They are currently only activated for RSpec2.
+To get them you need to adjust your mappings to use the `WithSigns` functions. 
+
+* `map <D-r> :SweetVimRspecRunFileWithSigns<CR>` "(CMD-r)  or (Apple-r)
+* `map <D-R> :SweetVimRspecRunFocusedWithSigns<CR>` "(SHIFT-CMD-r) 
+* `map <M-D-r> :SweetVimRspecRunPreviousWithSigns<CR>` "(OPT-CMD-r)
+
+Simply copy these into your .vimrc to activate them. 
+
+Note: The `<M-D-r>` mapping requires `:set macmeta`
+
+### Highlighting
+In your .vimrc add:
+* `highlight RSpecFailed guibg=#671d1a`
+* `highlight RSpecPending guibg=#54521a`
+
+### Icons
+Put icon files of your choice into the `plugin` folder and rename them to `rspec-failed.png` and `rspec-pending.png`
+
+
+If you do highlighting and icons, your next RSpec run could look like this:
+
+![](https://img.skitch.com/20110915-8tgij4yyq7t2hu4tx4yf5srpb9.jpg)
+
+
 ## TODO
 
 * An output window that shows rspec executing. 
@@ -74,3 +101,4 @@ include the fixes here.
 ## Thanks
 
 The formatter is based on code I found [here](https://wincent.com/blog/running-rspec-specs-from-inside-vim)
+
