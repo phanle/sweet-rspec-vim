@@ -83,7 +83,7 @@ function! s:AddSweetSigns(RspecResult)
   " Cleaning up any old signs
   call s:UnplaceSigns("RSpecFailed")
   call s:UnplaceSigns("RSpecPending")
-  let lines = split(a:RspecResult, "\n") " Split into lines
+  let lines = a:RspecResult
   let i = 0
   while i < len(lines)
     if lines[i] =~ '\(\[FAIL\]\)'
