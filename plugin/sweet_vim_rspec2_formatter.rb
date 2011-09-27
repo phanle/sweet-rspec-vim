@@ -8,6 +8,10 @@ module RSpec
         @@passes = []
         @@pending = []
 
+        def my_print(string)
+          output.print "<progress>#{string}</progress>"
+        end
+
         def example_failed(example)
           data = ""
           data << "+-+ "
@@ -23,7 +27,7 @@ module RSpec
           data << exception.backtrace.join("\n")
           data << "\n-+-\n" * 2
           @@failures << data
-          output.print "F"
+          my_print "F"
         end
 
         def example_pending(example)
@@ -35,23 +39,23 @@ module RSpec
           data << example.location + ": in `#{example.description}'"
           data << "\n\n-+-\n"
           @@pending << data
-          output.print "*"
+          my_print "*"
         end
 
         def example_passed(example)
           if ENV['SWEET_VIM_RSPEC_SHOW_PASSING'] == 'true'
             @@passes << "[PASS] #{example.full_description}\n"
           end
-          output.print "."
+          my_print "."
         end
 
         def dump_failures
-          output.puts @@failures.join("")
+          my_print @@failures.join("")
         end
 
         def dump_pending
-          output.puts 
-          output.puts @@pending.join("")
+          my_print "\n"
+          my_print @@pending.join("")
         end
  
         def message msg; end

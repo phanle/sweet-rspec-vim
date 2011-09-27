@@ -139,7 +139,7 @@ function! s:PollingSystemCall(systemcall)
   let pid = system(a:systemcall . " > " . output_file . " & echo $!") " the echo $! returns the process id
   let running = 1
   while running 
-    let progress =  system("cat " . output_file . " | head -1")
+    let progress =  s:ExtractProgressIndicators(system("cat " . output_file))
     let old_length = progress_length
     let progress_length = strlen(progress)
     let new_output = strpart(progress, old_length, progress_length - old_length)
@@ -148,8 +148,31 @@ function! s:PollingSystemCall(systemcall)
     sleep 100m
   endwhile
   echohl Special | echon " √Done" | echohl Normal
-  let result = readfile(output_file)[1:] " Omitting the first line, since it contains the progress indicators
+  let result = s:FilterProgressIndicatorWrappers(readfile(output_file))
   call delete(output_file)
+  return result
+endfunction
+
+" The formatter wraps every .,F or * in a <progress></progress> tag pair.
+" That way potential output that is done by the RSpec test itself can be
+" ignored
+function! s:ExtractProgressIndicators(string)
+  let result = ""
+  let start = 0
+  while start != -1
+    let start = match(a:string, '\c<progress>\zs\(.\{1,1}\)\ze<\/progress>', start)  
+    if start != -1
+      let result .= strpart(a:string, start, 1)
+    endif
+  endwhile
+  return result
+endfunction
+
+function! s:FilterProgressIndicatorWrappers(list)
+  let result = []
+  for line in a:list 
+    call add(result, substitute(line, '<\/\?progress>', "", "g"))
+  endfor
   return result
 endfunction
 
