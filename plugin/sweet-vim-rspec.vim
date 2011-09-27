@@ -5,8 +5,7 @@ if !exists('g:SweetVimRspecPlugin')
 endif
 
 function! SweetVimRspecRun(kind,signs)
-  echomsg "Running Specs..."
-  sleep 10m " Sleep long enough so MacVim redraws the screen so you can see the above message
+  echomsg "Running Specs: "
 
   if !exists('g:SweetVimRspecUseBundler')
     let g:SweetVimRspecUseBundler = 1
@@ -133,7 +132,6 @@ function! s:Execute(command)
 endfunction
 
 function! s:PollingSystemCall(systemcall)
-  " TODO: Prints that are embedded in tests are making trouble, somehow redirect them?
   let progress_length = 0
   let output_file = tempname()
   let pid = system(a:systemcall . " > " . output_file . " & echo $!") " the echo $! returns the process id
